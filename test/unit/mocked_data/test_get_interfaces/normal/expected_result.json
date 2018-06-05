@@ -1,0 +1,34 @@
+{
+    "Vlanif3000": {
+        "is_enabled": false,
+        "description": "Route Port,The Maximum Transmit Unit is 1500",
+        "last_flapped": -1.0,
+        "is_up": false,
+        "mac_address": "0C:45:BA:7D:83:E6",
+        "speed": -1
+    },
+    "NULL0": {
+        "is_enabled": true,
+        "description": "Route Port,The Maximum Transmit Unit is 1500",
+        "last_flapped": -1.0,
+        "is_up": true,
+        "mac_address": "",
+        "speed": -1
+    },
+    "MEth0/0/0": {
+        "is_enabled": true,
+        "description": "Route Port,The Maximum Transmit Unit is 1500",
+        "last_flapped": -1.0,
+        "is_up": true,
+        "mac_address": "0C:45:BA:7D:83:E0",
+        "speed": -1
+	},
+    "Vlanif100": {
+        "is_enabled": false,
+        "description": "Route Port,The Maximum Transmit Unit is 1500",
+        "last_flapped": -1.0,
+        "is_up": false,
+        "mac_address": "0C:45:BA:7D:83:E4",
+        "speed": -1
+	}
+}

@@ -1,0 +1,71 @@
+Vlanif3000 current state : DOWN (ifindex: 129)
+Line protocol current state : DOWN
+Description:
+Route Port,The Maximum Transmit Unit is 1500
+Internet Address is 192.168.255.1/24
+IP Sending Frames' Format is PKTFMT_ETHNT_2, Hardware address is 0c45-ba7d-83e6
+Current system time: 2018-05-23 05:49:46
+    Input bandwidth utilization  : --
+    Output bandwidth utilization : --
+
+NULL0 current state : UP (ifindex: 3)
+Line protocol current state : UP (spoofing)
+Description:
+Route Port,The Maximum Transmit Unit is 1500
+Internet protocol processing : disabled
+Current system time: 2018-05-23 05:49:46
+Physical is NULL DEV
+    Last 300 seconds input rate 0 bits/sec, 0 packets/sec
+    Last 300 seconds output rate 0 bits/sec, 0 packets/sec
+    Input: 0 packets,0 bytes
+           0 unicast,0 broadcast,0 multicast
+           0 errors,0 drops
+    Output:0 packets,0 bytes
+           0 unicast,0 broadcast,0 multicast
+           0 errors,0 drops
+    Last 300 seconds input utility rate:  0.00%
+    Last 300 seconds output utility rate: 0.00%
+
+MEth0/0/0 current state : UP (ifindex: 5)
+Line protocol current state : UP
+Last line protocol up time : 2018-05-22 00:02:41
+Description:
+Route Port,The Maximum Transmit Unit is 1500
+Internet Address is 10.128.92.110/24
+IP Sending Frames' Format is PKTFMT_ETHNT_2, Hardware address is 0c45-ba7d-83e0
+Media type: COMMON COPPER, Link type: auto negotiation
+Loopback: NONE, Maximal BW: 1000M, Current BW: 1000M, Full-duplex mode
+Last physical up time   : 2018-05-22 00:02:41
+Last physical down time : 2018-05-22 00:02:27
+Current system time: 2018-05-23 05:49:46
+Statistics last cleared:never
+    Last 300 seconds input rate: 11720 bits/sec, 16 packets/sec
+    Last 300 seconds output rate: 14198 bits/sec, 9 packets/sec
+    Input peak rate 18511 bits/sec, Record time: 2018-05-22 00:08:16
+    Output peak rate 14774 bits/sec, Record time: 2018-05-23 05:49:46
+    Input :           70812500 bytes,            1039148 packets
+    Output:             948196 bytes,               7557 packets
+    Input:
+      Unicast:                   6943,   Multicast:                   33105
+      Broadcast:               999328,   Overrun:                         0
+      Over-car-pps:                 0
+
+      Total Error:                  42,   CRC:                             0
+      Giants:                       0,   Jabbers:                         0
+      Runts:                        0,   Fragments:                       0
+
+    Output:
+      Unicast:                   7257,   Multicast:                       0
+      Broadcast:                  300,   Underrun:                        0
+    Last 300 seconds input utility rate:  0.01%
+    Last 300 seconds output utility rate: 0.01%
+    
+Vlanif100 current state : DOWN (ifindex: 134)
+Line protocol current state : DOWN
+Description:
+Route Port,The Maximum Transmit Unit is 1500
+Internet Address is 192.168.100.4/24
+IP Sending Frames' Format is PKTFMT_ETHNT_2, Hardware address is 0c45-ba7d-83e4
+Current system time: 2018-05-23 05:49:46
+    Input bandwidth utilization  : --
+    Output bandwidth utilization : --
