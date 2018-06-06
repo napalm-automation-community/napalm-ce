@@ -1,0 +1,41 @@
+Memory utilization statistics at 2018-05-25 03:38:13 781 ms
+System Total Memory: 3884224 Kbytes
+Total Memory Used: 784552 Kbytes
+Memory Using Percentage: 20%
+State: Non-overload
+Overload threshold:  95%, Overload clear threshold:  75%, Duration:      60s
+----------------------------
+ServiceName   MemUsage(KB)
+----------------------------
+FEA                 174184
+CMF                  58723
+FEC                  21229
+SYSTEM                9441
+DEVICE                7536
+VLAN                  7065
+STACKMNG              5964
+IP STACK              2588
+IFM                   2085
+OSPF                   906
+MSTP                   880
+RM                     780
+LOCAL PKT              484
+LDT                    397
+ARP                    363
+ND                     226
+SFLOW                  190
+EUM                    175
+OAM                    169
+SLA                    167
+FIBRESM                131
+AAA                    113
+LLDP                   106
+NETSTREAM               75
+TUNNEL                  68
+SMLK                    64
+PNP                     57
+TNLM                    50
+RGM                     32
+VRRP                    26
+PEM                     15
+----------------------------

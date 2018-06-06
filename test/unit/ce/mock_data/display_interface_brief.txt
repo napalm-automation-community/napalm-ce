@@ -1,0 +1,18 @@
+PHY: Physical
+*down: administratively down
+^down: standby
+(l): loopback
+(s): spoofing
+(b): BFD down
+(e): ETHOAM down
+(d): Dampening Suppressed
+(p): port alarm down
+(dl): DLDP down
+InUti/OutUti: input utility rate/output utility rate
+Interface                  PHY      Protocol  InUti OutUti   inErrors  outErrors
+40GE1/0/0                  *down    down         0%     0%          0          0
+40GE1/0/1                  down     down         0%     0%          0          0
+40GE1/0/2                  *down    down         0%     0%          0          0
+40GE1/0/3                  *down    down         0%     0%          0          0
+40GE3/0/2                  up       up        0.01%  0.01%          0          0
+40GE1/0/5                  down     down         0%     0%          0          0

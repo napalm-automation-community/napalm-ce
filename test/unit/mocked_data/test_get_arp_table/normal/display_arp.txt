@@ -1,0 +1,24 @@
+ARP Entry Types: D - Dynamic, S - Static, I - Interface
+EXP: Expire-time
+
+IP ADDRESS      MAC ADDRESS    EXP(M) TYPE/VLAN INTERFACE       VPN-INSTANCE
+------------------------------------------------------------------------------
+10.128.92.110   0c45-ba7d-83e0        I         MEth0/0/0
+10.128.92.1     781d-bacc-f501   20   D         MEth0/0/0
+10.128.92.2     0022-a10e-b696   19   D         MEth0/0/0
+10.128.92.13    f84a-bf54-86d3   20   D         MEth0/0/0
+10.128.92.41    ac4e-915c-6572   20   D         MEth0/0/0
+10.128.92.46    a8ca-7b7f-8a81   13   D         MEth0/0/0
+10.128.92.47    a8ca-7b7f-8a83   13   D         MEth0/0/0
+10.128.92.82    f84a-bf54-8663   20   D         MEth0/0/0
+10.128.92.97    1047-8005-4a53   20   D         MEth0/0/0
+10.128.92.100   0022-a10b-5710   19   D         MEth0/0/0
+10.128.92.101   0022-a10f-6f3e   19   D         MEth0/0/0
+10.128.92.218   3400-a30e-0893   20   D         MEth0/0/0
+192.168.200.3   0c45-ba7d-83ee        I         Vlanif2000
+192.168.200.6   0c45-ba7d-83ee        I         Vlanif2000
+192.168.200.8   0c45-ba7d-83ee        I         Vlanif2000
+192.168.255.1   0c45-ba7d-83e6        I         Vlanif3000
+192.168.100.4   0c45-ba7d-83e4        I         Vlanif100
+------------------------------------------------------------------------------
+Total:17         Dynamic:11       Static:0    Interface:6

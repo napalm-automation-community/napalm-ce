@@ -1,0 +1,17 @@
+{
+    "admin": {
+        "level": 3, 
+        "password": "", 
+        "sshkeys": []
+    }, 
+    "ftp": {
+        "level": 3, 
+        "password": "", 
+        "sshkeys": []
+    }, 
+    "reader": {
+        "level": 0,
+        "password": "", 
+        "sshkeys": []
+    }
+}

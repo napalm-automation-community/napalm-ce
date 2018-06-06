@@ -1,0 +1,31 @@
+Vlanif2000 current state : UP
+IPv6 protocol current state : UP
+link-local address is FE80::26D:8800:9335:F601
+  Global unicast address(es):
+    FC00::1, subnet is FC00::/64
+  Joined group address(es):
+    FF02::1:FF00:1
+    FF02::1:FF35:F601
+    FF02::2
+    FF02::1
+  MTU is 1500 bytes
+  ND DAD is enabled, number of DAD attempts: 1
+  ND reachable time is 1200000 milliseconds
+  ND retransmit interval is 1000 milliseconds
+  Hosts use stateless autoconfig for addresses
+
+Tunnel1 current state : DOWN
+IPv6 protocol current state : DOWN
+link-local address is FE80::225:9E00:C601:204 [TENTATIVE]
+  Global unicast address(es):
+    FC00::1, subnet is FC00::/64 [TENTATIVE]
+  Joined group address(es):
+    FF02::1:FF00:1
+    FF02::1:FF01:204
+    FF02::2
+    FF02::1
+  MTU is 1500 bytes
+  ND DAD is enabled, number of DAD attempts: 1
+  ND reachable time is 1200000 milliseconds
+  ND retransmit interval is 1000 milliseconds
+  Hosts use stateless autoconfig for addresses

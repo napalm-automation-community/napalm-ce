@@ -1,0 +1,52 @@
+CPU utilization statistics at 2018-05-25 03:09:17 616 ms
+System CPU Using Percentage :  12%
+CPU utilization for five seconds: 11%, one minute: 10%, five minutes: 10%.
+Max CPU Usage :                74%
+Max CPU Usage Stat. Time : 2018-05-22 00:02:24 642 ms
+State: Non-overload
+Overload threshold:  90%, Overload clear threshold:  75%, Duration:     480s
+---------------------------
+ServiceName  UseRate
+---------------------------
+SYSTEM           12%
+AAA               0%
+ARP               0%
+CMF               0%
+DEVICE            0%
+FEA               0%
+EUM               0%
+FEC               0%
+FIBRESM           0%
+IFM               0%
+IP STACK          0%
+LDT               0%
+LLDP              0%
+LOCAL PKT         0%
+MSTP              0%
+ND                0%
+NETSTREAM         0%
+OAM               0%
+OSPF              0%
+PEM               0%
+PNP               0%
+RGM               0%
+RM                0%
+SFLOW             0%
+SLA               0%
+SMLK              0%
+STACKMNG          0%
+SVRO              0%
+TNLM              0%
+TUNNEL            0%
+VLAN              0%
+VRRP              0%
+---------------------------
+CPU Usage Details
+----------------------------------------------------------------
+CPU     Current  FiveSec   OneMin  FiveMin  Max MaxTime
+----------------------------------------------------------------
+cpu0        18%      15%      16%      16%  91% 2018-05-22 00:02:22
+cpu1        14%      14%      11%      11%  93% 2018-05-22 00:02:22
+cpu2        15%      14%      14%      13%  90% 2018-05-22 00:02:22
+cpu3         1%       1%       1%       0%  42% 2018-05-25 00:02:21
+----------------------------------------------------------------

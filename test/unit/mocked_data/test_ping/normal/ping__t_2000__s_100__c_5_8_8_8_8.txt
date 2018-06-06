@@ -1,0 +1,12 @@
+  PING 8.8.8.8: 56  data bytes, press CTRL_C to break
+    Reply from 8.8.8.8: bytes=56 Sequence=1 ttl=60 time=2 ms
+    Reply from 8.8.8.8: bytes=56 Sequence=2 ttl=60 time=2 ms
+    Reply from 8.8.8.8: bytes=56 Sequence=3 ttl=60 time=2 ms
+    Reply from 8.8.8.8: bytes=56 Sequence=4 ttl=60 time=2 ms
+    Reply from 8.8.8.8: bytes=56 Sequence=5 ttl=60 time=2 ms
+
+  --- 8.8.8.8 ping statistics ---
+    5 packet(s) transmitted
+    5 packet(s) received
+    0.00% packet loss
+    round-trip min/avg/max = 2/2/2 ms

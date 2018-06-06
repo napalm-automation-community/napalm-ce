@@ -1,0 +1,12 @@
+{
+    "10GE4/0/1": [
+        {
+            "hostname": "HUAWEI",
+            "port": "10GE4/0/25"
+        },
+        {
+            "hostname": "HUAWEI2",
+            "port": "10GE4/0/26"
+        }
+    ]
+}

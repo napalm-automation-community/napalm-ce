@@ -1,0 +1,4 @@
+Local Interface         Exptime(s) Neighbor Interface      Neighbor Device
+-------------------------------------------------------------------------------
+10GE4/0/1                     111  10GE4/0/25              HUAWEI
+10GE4/0/1                     121  10GE4/0/26              HUAWEI2

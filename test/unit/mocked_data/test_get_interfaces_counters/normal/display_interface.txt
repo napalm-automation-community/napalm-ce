@@ -1,0 +1,267 @@
+10GE1/0/1 current state : DOWN (ifindex: 6)
+Line protocol current state : DOWN
+Description:
+Switch Port, PVID :    1, TPID : 8100(Hex), The Maximum Frame Length is 9216
+Internet protocol processing : disabled
+IP Sending Frames' Format is PKTFMT_ETHNT_2, Hardware address is 0c45-ba7d-83e1
+Port Mode:             AUTO,     Port Split:                   DISABLE
+Speed:                 AUTO,     Loopback:                        NONE
+Duplex:                FULL,     Negotiation:                        -
+Input Flow-control: DISABLE,     Output Flow-control:          DISABLE
+Mdi:                      -
+Last physical up time   : -
+Last physical down time : 2018-05-22 00:02:25
+Current system time: 2018-05-23 05:46:33
+Statistics last cleared:never
+    Last 300 seconds input rate: 0 bits/sec, 0 packets/sec
+    Last 300 seconds output rate: 0 bits/sec, 0 packets/sec
+    Input peak rate 0 bits/sec, Record time: -
+    Output peak rate 0 bits/sec, Record time: -
+    Input :                  123 bytes,                  0 packets
+    Output:                  321 bytes,                  0 packets
+    Input:
+      Unicast:                      554,   Multicast:                       795442
+      Broadcast:                    452,   Jumbo:                           42452
+      Discard:                      45,   Frames:                          0
+      Pause:                        0
+
+      Total Error:                  4252
+      CRC:                          0,   Giants:                          0
+      Jabbers:                      0,   Fragments:                       0
+      Runts:                        0,   DropEvents:                      0
+      Alignments:                   0,   Symbols:                         0
+      Ignoreds:                     0
+
+    Output:
+      Unicast:                      4245,   Multicast:                       452
+      Broadcast:                    4524,   Jumbo:                           0
+      Discard:                      402,   Buffers Purged:                  0
+      Pause:                        0
+
+    Input bandwidth utilization threshold : 90.00%
+    Output bandwidth utilization threshold: 90.00%
+    Last 300 seconds input utility rate:  0.00%
+    Last 300 seconds output utility rate: 0.00%
+
+10GE1/0/2 current state : DOWN (ifindex: 7)
+Line protocol current state : DOWN
+Description:
+Switch Port, PVID :    1, TPID : 8100(Hex), The Maximum Frame Length is 9216
+Internet protocol processing : disabled
+IP Sending Frames' Format is PKTFMT_ETHNT_2, Hardware address is 0c45-ba7d-83e1
+Port Mode:             AUTO,     Port Split:                   DISABLE
+Speed:                 AUTO,     Loopback:                        NONE
+Duplex:                FULL,     Negotiation:                        -
+Input Flow-control: DISABLE,     Output Flow-control:          DISABLE
+Mdi:                      -
+Last physical up time   : -
+Last physical down time : 2018-05-22 00:02:25
+Current system time: 2018-05-23 05:46:42
+Statistics last cleared:never
+    Last 300 seconds input rate: 0 bits/sec, 0 packets/sec
+    Last 300 seconds output rate: 0 bits/sec, 0 packets/sec
+    Input peak rate 0 bits/sec, Record time: -
+    Output peak rate 0 bits/sec, Record time: -
+    Input :                  0 bytes,                  0 packets
+    Output:                  0 bytes,                  0 packets
+    Input:
+      Unicast:                      0,   Multicast:                       0
+      Broadcast:                    0,   Jumbo:                           0
+      Discard:                      0,   Frames:                          0
+      Pause:                        0
+
+      Total Error:                  0
+      CRC:                          0,   Giants:                          0
+      Jabbers:                      0,   Fragments:                       0
+      Runts:                        0,   DropEvents:                      0
+      Alignments:                   0,   Symbols:                         0
+      Ignoreds:                     0
+
+    Output:
+      Unicast:                      0,   Multicast:                       0
+      Broadcast:                    0,   Jumbo:                           0
+      Discard:                      0,   Buffers Purged:                  0
+      Pause:                        0
+
+    Input bandwidth utilization threshold : 90.00%
+    Output bandwidth utilization threshold: 90.00%
+    Last 300 seconds input utility rate:  0.00%
+    Last 300 seconds output utility rate: 0.00%
+
+Eth-Trunk0 current state : DOWN (ifindex: 122)
+Line protocol current state : DOWN
+Description:
+Switch Port, PVID :    1, TPID : 8100(Hex), Hash Arithmetic : profile default, Maximal BW : 80Gbps, Current BW : 0Mbps, The Maximum Frame Length is 9216
+Internet protocol processing : disabled
+IP Sending Frames' Format is PKTFMT_ETHNT_2, Hardware address is 0c45-ba7d-83e1
+Current system time: 2018-05-23 05:49:46
+Physical is ETH_TRUNK
+    Last 300 seconds input rate 0 bits/sec, 0 packets/sec
+    Last 300 seconds output rate 0 bits/sec, 0 packets/sec
+    Input: 0 packets,245 bytes
+           54245 unicast,452 broadcast,542 multicast
+           542 errors,5442 drops
+    Output:452 packets,78 bytes
+           78 unicast,785 broadcast,785 multicast
+           875 errors,0 drops
+    Last 300 seconds input utility rate:  0.00%
+    Last 300 seconds output utility rate: 0.00%
+----------------------------------------------------------
+PortName                      Status              Weight
+----------------------------------------------------------
+40GE1/0/3                     DOWN                1
+40GE1/0/4                     DOWN                1
+----------------------------------------------------------
+The Number of Ports in Trunk : 2
+The Number of Up Ports in Trunk : 0
+
+Eth-Trunk1 current state : DOWN (ifindex: 127)
+Line protocol current state : DOWN
+Description:
+Switch Port, PVID : 3000, TPID : 8100(Hex), Hash Arithmetic : profile default, The Maximum Frame Length is 9216
+Internet protocol processing : disabled
+IP Sending Frames' Format is PKTFMT_ETHNT_2, Hardware address is 0c45-ba7d-83e1
+Current system time: 2018-05-23 05:49:46
+Physical is ETH_TRUNK
+    Last 300 seconds input rate 0 bits/sec, 0 packets/sec
+    Last 300 seconds output rate 0 bits/sec, 0 packets/sec
+    Input: 0 packets,0 bytes
+           0 unicast,0 broadcast,0 multicast
+           0 errors,0 drops
+    Output:0 packets,0 bytes
+           0 unicast,0 broadcast,0 multicast
+           0 errors,0 drops
+    Last 300 seconds input utility rate:  0.00%
+    Last 300 seconds output utility rate: 0.00%
+----------------------------------------------------------
+PortName                      Status              Weight
+----------------------------------------------------------
+----------------------------------------------------------
+The Number of Ports in Trunk : 0
+The Number of Up Ports in Trunk : 0
+
+LoopBack0 current state : UP (ifindex: 120)
+Line protocol current state : UP (spoofing)
+Last line protocol up time : 2018-05-22 00:02:27
+Description:
+Route Port,The Maximum Transmit Unit is 1500
+Internet Address is 192.168.0.9/32
+Current system time: 2018-05-23 05:49:46
+Physical is Loopback
+    Last 300 seconds input rate 0 bits/sec, 0 packets/sec
+    Last 300 seconds output rate 0 bits/sec, 0 packets/sec
+    Input: 0 packets,0 bytes
+           0 unicast,0 broadcast,0 multicast
+           0 errors,0 drops
+    Output:0 packets,0 bytes
+           0 unicast,0 broadcast,0 multicast
+           0 errors,0 drops
+    Last 300 seconds input utility rate:  0.00%
+    Last 300 seconds output utility rate: 0.00%
+
+MEth0/0/0 current state : UP (ifindex: 5)
+Line protocol current state : UP
+Last line protocol up time : 2018-05-22 00:02:41
+Description:
+Route Port,The Maximum Transmit Unit is 1500
+Internet Address is 10.128.92.110/24
+IP Sending Frames' Format is PKTFMT_ETHNT_2, Hardware address is 0c45-ba7d-83e0
+Media type: COMMON COPPER, Link type: auto negotiation
+Loopback: NONE, Maximal BW: 1000M, Current BW: 1000M, Full-duplex mode
+Last physical up time   : 2018-05-22 00:02:41
+Last physical down time : 2018-05-22 00:02:27
+Current system time: 2018-05-23 05:49:46
+Statistics last cleared:never
+    Last 300 seconds input rate: 11720 bits/sec, 16 packets/sec
+    Last 300 seconds output rate: 14198 bits/sec, 9 packets/sec
+    Input peak rate 18511 bits/sec, Record time: 2018-05-22 00:08:16
+    Output peak rate 14774 bits/sec, Record time: 2018-05-23 05:49:46
+    Input :           70812500 bytes,            1039148 packets
+    Output:             948196 bytes,               7557 packets
+    Input:
+      Unicast:                   6943,   Multicast:                   33105
+      Broadcast:               999328,   Overrun:                         0
+      Over-car-pps:                 0
+
+      Total Error:                  42,   CRC:                             0
+      Giants:                       0,   Jabbers:                         0
+      Runts:                        0,   Fragments:                       0
+
+    Output:
+      Unicast:                   7257,   Multicast:                       0
+      Broadcast:                  300,   Underrun:                        0
+    Last 300 seconds input utility rate:  0.01%
+    Last 300 seconds output utility rate: 0.01%
+
+NULL0 current state : UP (ifindex: 3)
+Line protocol current state : UP (spoofing)
+Description:
+Route Port,The Maximum Transmit Unit is 1500
+Internet protocol processing : disabled
+Current system time: 2018-05-23 05:49:46
+Physical is NULL DEV
+    Last 300 seconds input rate 0 bits/sec, 0 packets/sec
+    Last 300 seconds output rate 0 bits/sec, 0 packets/sec
+    Input: 0 packets,0 bytes
+           0 unicast,0 broadcast,0 multicast
+           0 errors,0 drops
+    Output:0 packets,0 bytes
+           0 unicast,0 broadcast,0 multicast
+           0 errors,0 drops
+    Last 300 seconds input utility rate:  0.00%
+    Last 300 seconds output utility rate: 0.00%
+
+Stack-Port1/1 current state : DOWN (ifindex: 62)
+Line protocol current state : DOWN
+Description:
+Stack Port, Hash arithmetic : According to SIP-XOR-DIP, The Maximum Frame Length is 12288
+Internet protocol processing : disabled
+IP Sending Frames' Format is PKTFMT_ETHNT_2, Hardware address is 0c45-ba7d-83e1
+Current system time: 2018-05-23 05:49:46
+Physical is STACK_PORT
+    Last 300 seconds input rate 0 bits/sec, 0 packets/sec
+    Last 300 seconds output rate 0 bits/sec, 0 packets/sec
+    Input:  0 packets,0 bytes
+            0 unicast,0 broadcast,0 multicast
+            0 errors,0 drops
+    Output: 0 packets,0 bytes
+            0 unicast,0 broadcast,0 multicast
+            0 errors,0 drops
+    Last 300 seconds input utility rate:  0.00%
+    Last 300 seconds output utility rate:  0.00%
+---------------------------------------------
+PortName                      Status
+---------------------------------------------
+---------------------------------------------
+The Number of Ports in Stack-Port : 0
+The Number of UP Ports in Stack-Port : 0
+
+Vlanif100 current state : DOWN (ifindex: 134)
+Line protocol current state : DOWN
+Description:
+Route Port,The Maximum Transmit Unit is 1500
+Internet Address is 192.168.100.4/24
+IP Sending Frames' Format is PKTFMT_ETHNT_2, Hardware address is 0c45-ba7d-83e4
+Current system time: 2018-05-23 05:49:46
+    Input bandwidth utilization  : --
+    Output bandwidth utilization : --
+
+Vlanif2000 current state : DOWN (ifindex: 128)
+Line protocol current state : DOWN
+Description:
+Route Port,The Maximum Transmit Unit is 1500
+Internet Address is 192.168.200.2/24
+IP Sending Frames' Format is PKTFMT_ETHNT_2, Hardware address is 0c45-ba7d-83ee
+Current system time: 2018-05-23 05:49:46
+    Input bandwidth utilization  : --
+    Output bandwidth utilization : --
+
+Vlanif3000 current state : DOWN (ifindex: 129)
+Line protocol current state : DOWN
+Description:
+Route Port,The Maximum Transmit Unit is 1500
+Internet Address is 192.168.255.1/24
+IP Sending Frames' Format is PKTFMT_ETHNT_2, Hardware address is 0c45-ba7d-83e6
+Current system time: 2018-05-23 05:49:46
+    Input bandwidth utilization  : --
+    Output bandwidth utilization : --

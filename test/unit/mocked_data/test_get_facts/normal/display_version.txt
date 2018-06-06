@@ -1,0 +1,17 @@
+Huawei Versatile Routing Platform Software
+VRP (R) software, Version 8.100 (CE6850HI V100R005C10SPC200)
+Copyright (C) 2012-2015 Huawei Technologies Co., Ltd.
+HUAWEI CE6850-48S6Q-HI uptime is 0 day, 12 hours, 0 minute
+
+CE6850-48S6Q-HI(Master) 1 : uptime is  0 day, 12 hours, 0 minute
+        StartupTime 2018/05/20   23:02:35
+Memory    Size    : 4096 M bytes
+Flash     Size    : 1024 M bytes
+NVRAM     Size    : 512  K bytes
+CE6850-48S6Q-HI version information
+1. PCB    Version : CEM48S6QP01    VER A
+2. MAB    Version : 1
+3. Board  Type    : CE6850-48S6Q-HI
+4. CPLD1  Version : 100
+5. CPLD2  Version : 100
+6. BIOS   Version : 312

@@ -1,0 +1,15 @@
+-------------------------------------------------------------------------------
+Slot PowerNo Present Mode State     Current   Voltage   ActualPower RatedPower
+                                    (Ampere)  (Volt)      (Watts)     (Watts)
+-------------------------------------------------------------------------------
+1    PWR1    YES     AC   Supply    7.6       12.1      92          600
+     PWR2    YES     N/A  NotSupply 0.0       0.0       0           600
+-------------------------------------------------------------------------------
+N/A:Power not available
+internal fan info:
+----------------------------------------------
+Slot   PowerNo  FanExist  Airflow Direction
+----------------------------------------------
+1      PWR1     YES       Front-to-Back
+       PWR2     YES       Front-to-Back
+----------------------------------------------

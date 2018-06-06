@@ -1,0 +1,17 @@
+{
+    "fqdn": "Unknown", 
+    "hostname": "test-huawei-router", 
+    "interface_list": [
+        "40GE1/0/0", 
+        "40GE1/0/1", 
+        "40GE1/0/2", 
+        "40GE1/0/3", 
+        "40GE3/0/2", 
+        "40GE1/0/5"
+    ], 
+    "model": "CE6850-48S6Q-HI", 
+    "os_version": "V100R005C10SPC200", 
+    "serial_number": "CE6850HI", 
+    "uptime": 43200, 
+    "vendor": "Huawei"
+}
