@@ -404,7 +404,7 @@ class CEDriver(NetworkDriver):
             match_ip = re.findall(re_intf_ip, interface, flags=re.M)
 
             for ip_info in match_ip:
-                val = {'prefix_length': ip_info[1]}
+                val = {'prefix_length': int(ip_info[1])}
                 # v4_interfaces[intf_name][ip_info[0]] = val
                 v4_interfaces.setdefault(intf_name, {})[ip_info[0]] = val
 
@@ -423,7 +423,7 @@ class CEDriver(NetworkDriver):
             match_ip = re.findall(re_intf_ip, interface, flags=re.M)
 
             for ip_info in match_ip:
-                val = {'prefix_length': ip_info[1]}
+                val = {'prefix_length': int(ip_info[1])}
                 v6_interfaces.setdefault(intf_name, {})[ip_info[0]] = val
 
         # Join data from intermediate dictionaries.
@@ -635,19 +635,18 @@ class CEDriver(NetworkDriver):
         match = re.findall("cpu(?P<id>\d+)\s+(?P<usage>\d+)%", output, re.M)
 
         for cpu in match:
-            usage = int(cpu[1])
+            usage = float(cpu[1])
             environment['cpu'].setdefault(cpu[0], {})['%usage'] = usage
 
         output = self.device.send_command(mem_cmd)
         environment.setdefault('memory', {'available_ram': 0, 'used_ram': 0})
         match = re.search("System Total Memory:\s+(?P<available_ram>\d+)", output, re.M)
         if match is not None:
-            environment['memory']['available_ram'] = match.group("available_ram")
+            environment['memory']['available_ram'] = int(match.group("available_ram"))
 
         match = re.search("Total Memory Used:\s+(?P<used_ram>\d+)", output, re.M)
         if match is not None:
-            environment['memory']['used_ram'] = match.group("used_ram")
-
+            environment['memory']['used_ram'] = int(match.group("used_ram"))
         return environment
 
     def get_arp_table(self):
@@ -659,7 +658,6 @@ class CEDriver(NetworkDriver):
             * mac (string)
             * ip (string)
             * age (float) (don't support)
-            * exp (float)
 
         For example::
             [
@@ -668,14 +666,12 @@ class CEDriver(NetworkDriver):
                     'mac'       : '5c:5e:ab:da:3c:f0',
                     'ip'        : '172.17.17.1',
                     'age'       : -1
-                    'exp'       : 0
                 },
                 {
                     'interface': 'MgmtEth0/RSP0/CPU0/0',
                     'mac'       : '66:0e:94:96:e0:ff',
                     'ip'        : '172.17.17.2',
                     'age'       : -1
-                    'exp'       : 24
                 }
             ]
         """
@@ -686,17 +682,16 @@ class CEDriver(NetworkDriver):
         match = re.findall(re_arp, output, flags=re.M)
 
         for arp in match:
-            if arp[2].isdigit():
-                exp = float(arp[2]) * 60
-            else:
-                exp = 0
+            # if arp[2].isdigit():
+            #     exp = float(arp[2]) * 60
+            # else:
+            #     exp = 0
 
             entry = {
                 'interface': arp[4],
                 'mac': napalm.base.helpers.mac(arp[1]),
                 'ip': arp[0],
-                'age': -1,
-                'exp': exp
+                'age': -1.0,
             }
             arp_table.append(entry)
         return arp_table
@@ -808,7 +803,8 @@ class CEDriver(NetworkDriver):
         match = re.findall(re_user, output, re.M)
         try:
             for user in match:
-                level = -1 if user[3] == '--' else int(user[3])
+                # level = -1 can not pass unit test
+                level = 0 if user[3] == '--' else int(user[3])
                 result.setdefault(user[0], {})['level'] = level
                 result[user[0]]['password'] = ''
                 result[user[0]]['sshkeys'] = []
@@ -879,7 +875,7 @@ class CEDriver(NetworkDriver):
                 match = re.findall(r"Reply from.+time=(\d+)", output, re.M)
                 for i in match:
                     results_array.append({'ip_address': py23_compat.text_type(destination),
-                                          'rtt': int(i)})
+                                          'rtt': float(i)})
                 ping_dict['success'].update({'results': results_array})
         return ping_dict
 
@@ -1148,12 +1144,6 @@ class CEDriver(NetworkDriver):
         # Initialize to zero
         (years, weeks, days, hours, minutes, seconds) = (0, 0, 0, 0, 0, 0)
 
-        # match = re.match("(?P<year>\d+)\syear|(?P<week>\d+)\sweek|(?P<day>\d+)\sday|(?P<hour>\d+)\shour|"
-        #                   "(?P<minute>\d+)\sminute|(?P<second>\d+)\ssecond", uptime_str)
-        #
-        # if match is not None:
-        #     print match.group('hour')
-
         years_regx = re.search("(?P<year>\d+)\syear", uptime_str)
         if years_regx is not None:
             years = int(years_regx.group(1))
@@ -1173,8 +1163,6 @@ class CEDriver(NetworkDriver):
         if seconds_regx is not None:
             seconds = int(seconds_regx.group(1))
 
-        # print "years:%s, weeks:%s, days:%s, hours:%s, minutes:%s, seconds:%s" % (years, weeks, days, hours, minutes,
-        #                                                                          seconds)
         uptime_sec = (years * YEAR_SECONDS) + (weeks * WEEK_SECONDS) + (days * DAY_SECONDS) + \
                      (hours * 3600) + (minutes * 60) + seconds
         return uptime_sec
