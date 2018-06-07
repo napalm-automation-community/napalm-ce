@@ -18,7 +18,6 @@ Napalm driver for Huawei CloudEngine switch.
 
 Read https://napalm.readthedocs.io for more information.
 """
-
 from __future__ import unicode_literals
 from datetime import datetime
 import socket
@@ -103,9 +102,7 @@ class CEDriver(NetworkDriver):
         self.profile = ["ce"]
 
     def open(self):
-        """
-        Open a connection to the device.
-        """
+        """Open a connection to the device."""
         try:
             if self.transport == 'ssh':
                 device_type = 'huawei'
@@ -123,16 +120,14 @@ class CEDriver(NetworkDriver):
             raise ConnectionException('Cannot connect to {}'.format(self.hostname))
 
     def close(self):
-        """
-        Closes the connection to the device.
-        """
+        """Close the connection to the device."""
         if self.changed and self.backup_file is not "":
             self._delete_file(self.backup_file)
         self.device.disconnect()
         self.device = None
 
     def is_alive(self):
-        """Returns a flag with the state of the SSH connection."""
+        """Return a flag with the state of the SSH connection."""
         null = chr(0)
         try:
             if self.device is None:
@@ -159,6 +154,7 @@ class CEDriver(NetworkDriver):
         return ''
 
     def discard_config(self):
+        """Discard changes."""
         if self.loaded:
             self.merge_candidate = ''  # clear the buffer
         if self.loaded and self.replace:
@@ -180,13 +176,13 @@ class CEDriver(NetworkDriver):
         # serial_number/IOS version/uptime/model
         for line in show_ver.splitlines():
             if 'VRP (R) software' in line:
-                search_result = re.search("\((?P<serial_number>CE\S+)\s+(?P<os_version>V\S+)\)", line)
+                search_result = re.search(r"\((?P<serial_number>CE\S+)\s+(?P<os_version>V\S+)\)", line)
                 if search_result is not None:
                     serial_number = search_result.group('serial_number')
                     os_version = search_result.group('os_version')
 
             if 'HUAWEI' in line and 'uptime is' in line:
-                search_result = re.search("CE\S+", line)
+                search_result = re.search(r"CE\S+", line)
                 if search_result is not None:
                     model = search_result.group(0)
                 uptime = self._parse_uptime(line)
@@ -200,8 +196,9 @@ class CEDriver(NetworkDriver):
         interface_list = []
         if 'Interface' in show_int_status:
             _, interface_part = show_int_status.split("Interface")
-            search_result = re.findall("(?P<interface>\S+)\s+(?P<physical_state>down|up|offline|\*down)\s+"
-                                       "(?P<protocal_state>down|up|\*down)", interface_part)
+            re_intf = r"(?P<interface>\S+)\s+(?P<physical_state>down|up|offline|\*down)\s+" \
+                      r"(?P<protocal_state>down|up|\*down)"
+            search_result = re.findall(re_intf, interface_part, flags=re.M)
             for interface_info in search_result:
                 interface_list.append(interface_info[0])
 
@@ -217,6 +214,7 @@ class CEDriver(NetworkDriver):
         }
 
     def cli(self, commands):
+        """Execute raw CLI commands and returns their output."""
         cli_output = {}
         if type(commands) is not list:
             raise TypeError('Please enter a valid list of commands!')
@@ -248,6 +246,7 @@ class CEDriver(NetworkDriver):
             raise CommitError('No config loaded.')
 
     def load_merge_candidate(self, filename=None, config=None):
+        """Open the candidate config and merge."""
         if not filename and not config:
             raise MergeConfigException('filename or config param must be provided.')
 
@@ -262,6 +261,7 @@ class CEDriver(NetworkDriver):
         self.loaded = True
 
     def load_replace_candidate(self, filename=None, config=None):
+        """Open the candidate config and replace."""
         if not filename and not config:
             raise ReplaceConfigException('filename or config param must be provided.')
 
@@ -271,30 +271,27 @@ class CEDriver(NetworkDriver):
 
     def get_interfaces(self):
         """
-        Get interface details.
+        Get interface details (last_flapped is not implemented).
 
-        last_flapped is not implemented
-
-        Example Output:
-
-        {   u'Vlan1': {   'description': u'',
-                      'is_enabled': True,
-                      'is_up': True,
-                      'last_flapped': -1.0,
-                      'mac_address': u'a493.4cc1.67a7',
-                      'speed': 100},
-        u'Vlan100': {   'description': u'Data Network',
-                        'is_enabled': True,
-                        'is_up': True,
-                        'last_flapped': -1.0,
-                        'mac_address': u'a493.4cc1.67a7',
-                        'speed': 100},
-        u'Vlan200': {   'description': u'Voice Network',
-                        'is_enabled': True,
-                        'is_up': True,
-                        'last_flapped': -1.0,
-                        'mac_address': u'a493.4cc1.67a7',
-                        'speed': 100}}
+        Sample Output:
+        {
+            "Vlanif3000": {
+                "is_enabled": false,
+                "description": "Route Port,The Maximum Transmit Unit is 1500",
+                "last_flapped": -1.0,
+                "is_up": false,
+                "mac_address": "0C:45:BA:7D:83:E6",
+                "speed": -1
+            },
+            "Vlanif100": {
+                "is_enabled": false,
+                "description": "Route Port,The Maximum Transmit Unit is 1500",
+                "last_flapped": -1.0,
+                "is_up": false,
+                "mac_address": "0C:45:BA:7D:83:E4",
+                "speed": -1
+            }
+        }
         """
         interfaces = {}
         output = self.device.send_command('display interface')
@@ -360,25 +357,28 @@ class CEDriver(NetworkDriver):
 
         Sample output:
         {
-            "Ethernet2/3": {
+            "LoopBack0": {
                 "ipv4": {
-                    "4.4.4.4": {
-                        "prefix_length": 16
-                    }
-                },
-                "ipv6": {
-                    "2001:db8::1": {
-                        "prefix_length": 10
-                    },
-                    "fe80::2ec2:60ff:fe4f:feb2": {
-                        "prefix_length": "128"
+                    "192.168.0.9": {
+                        "prefix_length": 32
                     }
                 }
             },
-            "Ethernet2/2": {
+            "Vlanif2000": {
                 "ipv4": {
-                    "2.2.2.2": {
-                        "prefix_length": 27
+                    "192.168.200.3": {
+                        "prefix_length": 24
+                    },
+                    "192.168.200.6": {
+                        "prefix_length": 24
+                    },
+                    "192.168.200.8": {
+                        "prefix_length": 24
+                    }
+                },
+                "ipv6": {
+                    "FC00::1": {
+                        "prefix_length": 64
                     }
                 }
             }
@@ -436,40 +436,7 @@ class CEDriver(NetworkDriver):
         return interfaces_ip
 
     def get_interfaces_counters(self):
-        """
-        Get interface counters. Returns a dictionary of dictionaries.
-        {
-            u'Ethernet2': {
-                'tx_multicast_packets': 699,
-                'tx_discards': 0,
-                'tx_octets': 88577,
-                'tx_errors': 0,
-                'rx_octets': 0,
-                'tx_unicast_packets': 0,
-                'rx_errors': 0,
-                'tx_broadcast_packets': 0,
-                'rx_multicast_packets': 0,
-                'rx_broadcast_packets': 0,
-                'rx_discards': 0,
-                'rx_unicast_packets': 0
-                },
-            u'Ethernet1': {
-                 'tx_multicast_packets': 293,
-                 'tx_discards': 0,
-                 'tx_octets': 38639,
-                 'tx_errors': 0,
-                 'rx_octets': 0,
-                 'tx_unicast_packets': 0,
-                 'rx_errors': 0,
-                 'tx_broadcast_packets': 0,
-                 'rx_multicast_packets': 0,
-                 'rx_broadcast_packets': 0,
-                 'rx_discards': 0,
-                 'rx_unicast_packets': 0
-                }
-        }
-        """
-
+        """Return interfaces counters."""
         def process_counts(tup):
             for item in tup:
                 if item != "":
@@ -557,36 +524,38 @@ class CEDriver(NetworkDriver):
 
     def get_environment(self):
         """
-        Get environment facts.
-        environment = {
-          "fans": {
-            "invalid": {
-              "status": False
-            }
-          },
-          "temperature": {
-            "invalid": {
-              "temperature": 0.0,
-              "is_alert": False,
-              "is_critical": False
-            }
-          },
-          "power": {
-              "invalid": {
-                "status": True,
-                "capacity": 0.0,
-                "output": 0.0
-              }
-          },
-          "cpu": {
-            "0": {
-              "%usage": 0
+        Return environment details.
+
+        Sample output:
+        {
+            "cpu": {
+                "0": {
+                    "%usage": 18.0
+                }
             },
-          },
-          "memory": {
-            "available_ram": 0,  # Kbytes
-            "used_ram": 0
-          }
+            "fans": {
+                "FAN1": {
+                    "status": true
+                }
+            },
+            "memory": {
+                "available_ram": 3884224,
+                "used_ram": 784552
+            },
+            "power": {
+                "PWR1": {
+                    "capacity": 600.0,
+                    "output": 92.0,
+                    "status": true
+                }
+            },
+            "temperature": {
+                "CPU": {
+                    "is_alert": false,
+                    "is_critical": false,
+                    "temperature": 45.0
+                }
+            }
         }
         """
         environment = {}
@@ -599,7 +568,7 @@ class CEDriver(NetworkDriver):
 
         output = self.device.send_command(fan_cmd)
         environment.setdefault('fans', {})
-        match = re.findall("(?P<id>FAN\S+).+(?P<status>Normal|Abnormal)", output, re.M)
+        match = re.findall(r"(?P<id>FAN\S+).+(?P<status>Normal|Abnormal)", output, re.M)
         # if match:
         for fan in match:
             status = True if fan[1] == "Normal" else False
@@ -607,8 +576,9 @@ class CEDriver(NetworkDriver):
 
         output = self.device.send_command(power_cmd)
         environment.setdefault('power', {})
-        match = re.findall("(?P<id>PWR\S+).+(?P<status>Supply|NotSupply|Sleep)\s+\S+\s+\S+\s+"
-                           "(?P<output>\d+)\s+(?P<capacity>\d+)", output, re.M)
+        re_power = r"(?P<id>PWR\S+).+(?P<status>Supply|NotSupply|Sleep)\s+\S+\s+\S+\s+" \
+                   r"(?P<output>\d+)\s+(?P<capacity>\d+)"
+        match = re.findall(re_power, output, re.M)
 
         for power in match:
             status = True if power[1] == "Supply" else False
@@ -618,8 +588,8 @@ class CEDriver(NetworkDriver):
 
         output = self.device.send_command(temp_cmd)
         environment.setdefault('temperature', {})
-        match = re.findall("(?P<name>\S+)\s+(?P<status>NORMAL|MAJOR|FATAL|ABNORMAL)\s+\S+\s+\S+\s+(?P<temperature>\d+)",
-                           output, re.M)
+        re_temp = r"(?P<name>\S+)\s+(?P<status>NORMAL|MAJOR|FATAL|ABNORMAL)\s+\S+\s+\S+\s+(?P<temperature>\d+)"
+        match = re.findall(re_temp, output, re.M)
 
         for temp in match:
             environment['temperature'].setdefault(temp[0], {})
@@ -632,7 +602,7 @@ class CEDriver(NetworkDriver):
 
         output = self.device.send_command(cpu_cmd)
         environment.setdefault('cpu', {})
-        match = re.findall("cpu(?P<id>\d+)\s+(?P<usage>\d+)%", output, re.M)
+        match = re.findall(r"cpu(?P<id>\d+)\s+(?P<usage>\d+)%", output, re.M)
 
         for cpu in match:
             usage = float(cpu[1])
@@ -640,11 +610,11 @@ class CEDriver(NetworkDriver):
 
         output = self.device.send_command(mem_cmd)
         environment.setdefault('memory', {'available_ram': 0, 'used_ram': 0})
-        match = re.search("System Total Memory:\s+(?P<available_ram>\d+)", output, re.M)
+        match = re.search(r"System Total Memory:\s+(?P<available_ram>\d+)", output, re.M)
         if match is not None:
             environment['memory']['available_ram'] = int(match.group("available_ram"))
 
-        match = re.search("Total Memory Used:\s+(?P<used_ram>\d+)", output, re.M)
+        match = re.search(r"Total Memory Used:\s+(?P<used_ram>\d+)", output, re.M)
         if match is not None:
             environment['memory']['used_ram'] = int(match.group("used_ram"))
         return environment
@@ -657,9 +627,9 @@ class CEDriver(NetworkDriver):
             * interface (string)
             * mac (string)
             * ip (string)
-            * age (float) (don't support)
+            * age (float) (not support)
 
-        For example::
+        Sample output:
             [
                 {
                     'interface' : 'MgmtEth0/RSP0/CPU0/0',
@@ -697,6 +667,13 @@ class CEDriver(NetworkDriver):
         return arp_table
 
     def get_config(self, retrieve='all'):
+        """
+        Get config from device.
+
+        Returns the running configuration as dictionary.
+        The candidate and startup are always empty string for now,
+        since CE does not support candidate configuration.
+        """
         config = {
             'startup': '',
             'running': '',
@@ -714,28 +691,21 @@ class CEDriver(NetworkDriver):
 
     def get_lldp_neighbors(self):
         """
-        Returns a dictionary where the keys are local ports.
+        Return LLDP neighbors details.
+
+        Sample output:
         {
-        u'Ethernet2':
-            [
+            "10GE4/0/1": [
                 {
-                'hostname': u'junos-unittest',
-                'port': u'520',
-                }
-            ],
-        u'Ethernet1':
-            [
-                {
-                'hostname': u'junos-unittest',
-                'port': u'519',
+                    "hostname": "HUAWEI",
+                    "port": "10GE4/0/25"
                 },
                 {
-                'hostname': u'ios-xrv-unittest',
-                'port': u'Gi0/0/0/0',
+                    "hostname": "HUAWEI2",
+                    "port": "10GE4/0/26"
                 }
             ]
         }
-
         """
         results = {}
         command = 'display lldp neighbor brief'
@@ -755,15 +725,29 @@ class CEDriver(NetworkDriver):
 
     def get_mac_address_table(self):
         """
-        Returns a lists of dictionaries. Each dictionary represents an entry in the MAC Address
-        Table, having the following keys
-            * mac (string)
-            * interface (string)
-            * vlan (int)
-            * active (boolean)
-            * static (boolean)
-            * moves (int)
-            * last_move (float)
+        Return the MAC address table.
+
+        Sample output:
+        [
+            {
+                "active": true,
+                "interface": "10GE1/0/1",
+                "last_move": -1.0,
+                "mac": "00:00:00:00:00:33",
+                "moves": -1,
+                "static": false,
+                "vlan": 100
+            },
+            {
+                "active": false,
+                "interface": "10GE1/0/2",
+                "last_move": -1.0,
+                "mac": "00:00:00:00:00:01",
+                "moves": -1,
+                "static": true,
+                "vlan": 200
+            }
+        ]
         """
         mac_address_table = []
         command = 'display mac-address'
@@ -786,16 +770,17 @@ class CEDriver(NetworkDriver):
 
     def get_users(self):
         """
-        Returns a dictionary with the configured users. The keys of the main dictionary represents the username.
+        Return the configuration of the users.
+
+        Sample output:
         {
-        'mircea': {
-            'level': 15,
-            'password': '$1$0P70xKPa$z46fewjo/10cBTckk6I/w/',
-            'sshkeys': []
+            "admin": {
+                "level": 3,
+                "password": "",
+                "sshkeys": []
             }
         }
         """
-
         result = {}
         command = 'display aaa local-user'
         output = self.device.send_command(command)
@@ -818,6 +803,7 @@ class CEDriver(NetworkDriver):
         return result
 
     def rollback(self):
+        """Rollback to previous commit."""
         if self.changed:
             self._load_config(self.backup_file)
             self.changed = False
@@ -825,6 +811,7 @@ class CEDriver(NetworkDriver):
 
     def ping(self, destination, source=c.PING_SOURCE, ttl=c.PING_TTL, timeout=c.PING_TIMEOUT,
              size=c.PING_SIZE, count=c.PING_COUNT, vrf=c.PING_VRF):
+        """Execute ping on the device."""
         ping_dict = {}
         command = 'ping'
         # Timeout in milliseconds to wait for each reply, the default is 2000
@@ -894,9 +881,9 @@ class CEDriver(NetworkDriver):
 
     def __get_lldp_neighbors_detail(self, interface=''):
         """
-        Returns a detailed view of the LLDP neighbors as a dictionary
-        containing lists of dictionaries for each interface.
+        Return a detailed view of the LLDP neighbors as a dictionary.
 
+        Sample output:
         {
         'TenGigE0/0/0/8': [
             {
@@ -917,7 +904,9 @@ class CEDriver(NetworkDriver):
 
     def __get_ntp_peers(self):
         """
-        Returns the NTP peers configuration as dictionary.
+        Return the NTP peers configuration as dictionary.
+
+        Sample output:
         {
             '192.168.0.1': {},
             '17.72.148.53': {},
@@ -932,7 +921,9 @@ class CEDriver(NetworkDriver):
 
     def __get_ntp_servers(self):
         """
-        Returns the NTP servers configuration as dictionary.
+        Return the NTP servers configuration as dictionary.
+
+        Sample output:
         {
             '192.168.0.1': {},
             '17.72.148.53': {},
@@ -985,17 +976,11 @@ class CEDriver(NetworkDriver):
         self.device.send_command(command)
 
     def _save_config(self, filename=''):
-        """
-        Save the current running config to the given file.
-        save cmd output:
-        Warning: Are you sure to save the configuration to flash:/config-backup.cfg? [Y/N]:y
-        Now saving the current configuration to the slot 1
-        Info: Save the configuration successfully.
-        """
+        """Save the current running config to the given file."""
         command = 'save {}'.format(filename)
-        save_log = self.device.send_command(command, max_loops=10, expect_string='Y\/N')
+        save_log = self.device.send_command(command, max_loops=10, expect_string=r'Y/N')
         # Search pattern will not be detected when set a new hostname, so don't use auto_find_prompt=False
-        save_log += self.device.send_command('y', expect_string='<.+>')
+        save_log += self.device.send_command('y', expect_string=r'<.+>')
         search_result = re.search("successfully", save_log, re.M)
         if search_result is None:
             msg = "Failed to save config. Command output:{}".format(save_log)
@@ -1003,11 +988,11 @@ class CEDriver(NetworkDriver):
 
     def _load_config(self, config_file):
         command = 'rollback configuration to file {0}'.format(config_file)
-        rollback_result = self.device.send_command(command, expect_string='Y\/N')
-        rollback_result += self.device.send_command('y', expect_string='[<\[].+[>\]]')
+        rollback_result = self.device.send_command(command, expect_string=r'Y/N')
+        rollback_result += self.device.send_command('y', expect_string=r'[<\[].+[>\]]')
         search_result = re.search("clear the information", rollback_result, re.M)
         if search_result is not None:
-            rollback_result += self.device.send_command('y', expect_string='<.+>')
+            rollback_result += self.device.send_command('y', expect_string=r'<.+>')
 
         search_result = re.search("succeeded|finished", rollback_result, re.M)
         if search_result is None:
@@ -1083,7 +1068,7 @@ class CEDriver(NetworkDriver):
         command = 'display system file-md5 {0}'.format(dst)
         output = self.device.send_command(command)
         filename = os.path.basename(dst)
-        match = re.search(filename + '\s+(?P<md5>\w+)', output, re.M)
+        match = re.search(filename + r'\s+(?P<md5>\w+)', output, re.M)
         if match is None:
             msg = "Unexpected format: {}".format(output)
             raise ValueError(msg)
@@ -1124,13 +1109,13 @@ class CEDriver(NetworkDriver):
         command = 'dir {}'.format('flash:')
         output = self.device.send_command(command)
 
-        match = re.search('\(\d.*KB free\)', output, re.M)
+        match = re.search(r'\(\d.*KB free\)', output, re.M)
         if match is None:
             msg = "Failed to get free space of flash (not match). Log: {}".format(output)
             raise ValueError(msg)
 
         kbytes_free = 0
-        num_list = map(int, re.findall('\d+', match.group()))
+        num_list = map(int, re.findall(r'\d+', match.group()))
         for index, val in enumerate(reversed(num_list)):
             kbytes_free += val * (1000 ** index)
         bytes_free = kbytes_free * 1024
@@ -1138,28 +1123,25 @@ class CEDriver(NetworkDriver):
 
     @staticmethod
     def _parse_uptime(uptime_str):
-        """
-        Return the uptime in seconds as an integer
-        """
-        # Initialize to zero
+        """Return the uptime in seconds as an integer."""
         (years, weeks, days, hours, minutes, seconds) = (0, 0, 0, 0, 0, 0)
 
-        years_regx = re.search("(?P<year>\d+)\syear", uptime_str)
+        years_regx = re.search(r"(?P<year>\d+)\syear", uptime_str)
         if years_regx is not None:
             years = int(years_regx.group(1))
-        weeks_regx = re.search("(?P<week>\d+)\sweek", uptime_str)
+        weeks_regx = re.search(r"(?P<week>\d+)\sweek", uptime_str)
         if weeks_regx is not None:
             weeks = int(weeks_regx.group(1))
-        days_regx = re.search("(?P<day>\d+)\sday", uptime_str)
+        days_regx = re.search(r"(?P<day>\d+)\sday", uptime_str)
         if days_regx is not None:
             days = int(days_regx.group(1))
-        hours_regx = re.search("(?P<hour>\d+)\shour", uptime_str)
+        hours_regx = re.search(r"(?P<hour>\d+)\shour", uptime_str)
         if hours_regx is not None:
             hours = int(hours_regx.group(1))
-        minutes_regx = re.search("(?P<minute>\d+)\sminute", uptime_str)
+        minutes_regx = re.search(r"(?P<minute>\d+)\sminute", uptime_str)
         if minutes_regx is not None:
             minutes = int(minutes_regx.group(1))
-        seconds_regx = re.search("(?P<second>\d+)\ssecond", uptime_str)
+        seconds_regx = re.search(r"(?P<second>\d+)\ssecond", uptime_str)
         if seconds_regx is not None:
             seconds = int(seconds_regx.group(1))
 

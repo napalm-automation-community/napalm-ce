@@ -37,24 +37,30 @@ class PatchedCEDriver(ce.CEDriver):
         self.device = FakeCEDevice()
 
     def disconnect(self):
+        """Disconnect device."""
         pass
 
     def is_alive(self):
+        """Return a flag with the state of the SSH connection."""
         return {
             'is_alive': True  # In testing everything works..
         }
 
     def open(self):
+        """Connect device."""
         pass
 
 
 class FakeCEDevice(BaseTestDouble):
     """HUAWEI CloudEngine device test double."""
+
     def send_command(self, command, **kwargs):
+        """Send command to device."""
         filename = '{}.txt'.format(self.sanitize_text(command))
         full_path = self.find_file(filename)
         result = self.read_txt_file(full_path)
         return py23_compat.text_type(result)
 
     def disconnect(self):
+        """Disconnect from the device."""
         pass

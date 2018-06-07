@@ -20,8 +20,11 @@ from napalm.base.test.base import TestConfigNetworkDriver, TestGettersNetworkDri
 
 
 class TestConfigCEDriver(unittest.TestCase, TestConfigNetworkDriver):
+    """Getters Tests for CEDriver."""
+
     @classmethod
     def setUpClass(cls):
+        """Execute when the class is instantiated."""
         hostname = '127.0.0.1'
         username = 'vagrant'
         password = 'vagrant'
@@ -41,15 +44,12 @@ class TestGetterDriver(unittest.TestCase, TestGettersNetworkDriver):
     def setUpClass(cls):
         """Run before starting the tests."""
         cls.mock = True
-
         hostname = '127.0.0.1'
         username = 'vagrant'
         password = 'vagrant'
         cls.vendor = 'ce'
-
         optional_args = {'port': 12443, }
-        cls.device = ce.CEDriver(hostname, username, password, timeout=60,
-                                             optional_args=optional_args)
+        cls.device = ce.CEDriver(hostname, username, password, timeout=60, optional_args=optional_args)
 
         if cls.mock:
             cls.device.device = FakeDevice()
@@ -58,6 +58,8 @@ class TestGetterDriver(unittest.TestCase, TestGettersNetworkDriver):
 
 
 class FakeDevice:
+    """Class to fake a AOS Device."""
+
     @staticmethod
     def read_txt_file(filename):
         """Return the content of a file."""
