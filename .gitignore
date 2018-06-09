@@ -63,3 +63,4 @@ test/unit/test_devices.py
 report.json
 
 .pytest_cache/
+.python-version
