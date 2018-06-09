@@ -227,9 +227,9 @@ class CEDriver(NetworkDriver):
     def commit_config(self):
         """Commit configuration."""
         if self.loaded:
-            self.backup_file = 'config_' + datetime.now().strftime("%Y%m%d_%H%M") + '.cfg'
-            self._save_config(self.backup_file)
             try:
+                self.backup_file = 'config_' + datetime.now().strftime("%Y%m%d_%H%M") + '.cfg'
+                self._save_config(self.backup_file)
                 if self.replace:
                     self._load_config(self.replace_file.split('/')[-1])
                 else:
@@ -240,7 +240,6 @@ class CEDriver(NetworkDriver):
                 self.loaded = False
                 self._save_config()
             except Exception as e:
-                self._delete_file(self.backup_file)
                 raise CommitError(str(e))
         else:
             raise CommitError('No config loaded.')
@@ -1076,11 +1075,18 @@ class CEDriver(NetworkDriver):
 
     def _commit_merge(self):
         commands = [command for command in self.merge_candidate.splitlines() if command]
-        commands.append('commit')
-        output = self.device.send_config_set(commands)
-        check_error = re.search("error", output, re.IGNORECASE)
-        if check_error is not None:
-            raise MergeConfigException('Error while applying config!')
+        output = self.device.send_config_set(commands, exit_config_mode=False)
+
+        if self.device.check_config_mode():
+            check_error = re.search("error", output, re.IGNORECASE)
+            if check_error is not None:
+                # TODO: quit configuration mode
+                self.device.send_command('return', expect_string=r'<.+>')
+                raise MergeConfigException('Error while applying config!')
+            self.device.send_command('commit', expect_string=r'\[.+\]')
+            self.device.send_command('return', expect_string=r'<.+>')
+        else:
+            raise MergeConfigException('Not in configuration mode.')
 
     def _get_merge_diff(self):
         diff = []
