@@ -229,6 +229,8 @@ class CEDriver(NetworkDriver):
         if self.loaded:
             try:
                 self.backup_file = 'config_' + datetime.now().strftime("%Y%m%d_%H%M") + '.cfg'
+                if self._check_file_exists(self.backup_file):
+                    self._delete_file(self.backup_file)
                 self._save_config(self.backup_file)
                 if self.replace:
                     self._load_config(self.replace_file.split('/')[-1])
@@ -1011,7 +1013,11 @@ class CEDriver(NetworkDriver):
             msg = 'Could not transfer file. Not enough space on device.'
             raise ReplaceConfigException(msg)
 
-        if not self._check_file_exists(self.replace_file):
+        need_transfer = True
+        if self._check_file_exists(self.replace_file):
+            if self._check_md5(self.replace_file):
+                need_transfer = False
+        if need_transfer:
             dest = os.path.basename(self.replace_file)
             # full_remote_path = 'flash:/{}'.format(dest)
             with paramiko.SSHClient() as ssh:
@@ -1042,10 +1048,9 @@ class CEDriver(NetworkDriver):
         output = self.device.send_command(command)
         if 'No file found' in output:
             return False
-        else:
-            return self._file_already_exists(cfg_file)
+        return True
 
-    def _file_already_exists(self, dst):
+    def _check_md5(self, dst):
         dst_hash = self._get_remote_md5(dst)
         src_hash = self._get_local_md5(dst)
         if src_hash == dst_hash:
@@ -1075,18 +1080,29 @@ class CEDriver(NetworkDriver):
 
     def _commit_merge(self):
         commands = [command for command in self.merge_candidate.splitlines() if command]
-        output = self.device.send_config_set(commands, exit_config_mode=False)
+        output = ''
 
-        if self.device.check_config_mode():
-            check_error = re.search("error", output, re.IGNORECASE)
-            if check_error is not None:
-                # TODO: quit configuration mode
-                self.device.send_command('return', expect_string=r'<.+>')
-                raise MergeConfigException('Error while applying config!')
-            self.device.send_command('commit', expect_string=r'\[.+\]')
-            self.device.send_command('return', expect_string=r'<.+>')
-        else:
-            raise MergeConfigException('Not in configuration mode.')
+        try:
+            output += self.device.send_command('system-view', expect_string=r'\[.+\]')
+            for command in commands:
+                output += self.device.send_command(command, expect_string=r'\[.+\]')
+
+            if self.device.check_config_mode():
+                check_error = re.search("error", output, re.IGNORECASE)
+                if check_error is not None:
+                    return_log = self.device.send_command('return', expect_string=r'[<\[].+[>\]]')
+                    if 'Uncommitted configurations' in return_log:
+                        # Discard uncommitted configuration
+                        return_log += self.device.send_command('n', expect_string=r'<.+>')
+                    output += return_log
+                    raise MergeConfigException('Error while applying config!')
+                output += self.device.send_command('commit', expect_string=r'\[.+\]')
+                output += self.device.send_command('return', expect_string=r'<.+>')
+            else:
+                raise MergeConfigException('Not in configuration mode.')
+        except Exception as e:
+            msg = str(e) + '\nconfiguration output: ' + output
+            raise MergeConfigException(msg)
 
     def _get_merge_diff(self):
         diff = []
