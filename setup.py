@@ -15,16 +15,17 @@ reqs = [str(ir.req) for ir in install_reqs]
 
 setup(
     name="napalm-ce",
-    version="0.1.0",
+    version="0.1.1",
     packages=find_packages(),
     author="Hao Tang",
     author_email="thddaniel92@gmail.com",
     description="Network Automation and Programmability Abstraction Layer with Multivendor support",
     classifiers=[
         'Topic :: Utilities',
-         'Programming Language :: Python',
-         'Programming Language :: Python :: 2',
-         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.6',
         'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS',
     ],
