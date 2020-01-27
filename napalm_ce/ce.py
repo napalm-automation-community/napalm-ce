@@ -81,7 +81,8 @@ class CEDriver(NetworkDriver):
             'alt_host_keys': False,
             'alt_key_file': '',
             'ssh_config_file': None,
-            'allow_agent': False
+            'allow_agent': False,
+            'keepalive': 30
         }
 
         # Build dict of any optional Netmiko args
