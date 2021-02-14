@@ -36,7 +36,6 @@ from netmiko.ssh_exception import NetMikoTimeoutException
 # import NAPALM Base
 import napalm.base.helpers
 from napalm.base.base import NetworkDriver
-from napalm.base.utils import py23_compat
 import napalm.base.constants as c
 from napalm.base.exceptions import (
     ConnectionException,
@@ -206,10 +205,10 @@ class CEDriver(NetworkDriver):
         return {
             'uptime': int(uptime),
             'vendor': vendor,
-            'os_version': py23_compat.text_type(os_version),
-            'serial_number': py23_compat.text_type(serial_number),
-            'model': py23_compat.text_type(model),
-            'hostname': py23_compat.text_type(hostname),
+            'os_version': str(os_version),
+            'serial_number': str(serial_number),
+            'model': str(model),
+            'hostname': str(hostname),
             'fqdn': fqdn,  # ? fqdn(fully qualified domain name)
             'interface_list': interface_list
         }
@@ -222,7 +221,7 @@ class CEDriver(NetworkDriver):
 
         for command in commands:
             output = self.device.send_command(command)
-            cli_output[py23_compat.text_type(command)] = output
+            cli_output[str(command)] = output
         return cli_output
 
     def commit_config(self):
@@ -684,10 +683,10 @@ class CEDriver(NetworkDriver):
 
         if retrieve.lower() in ('running', 'all'):
             command = 'display current-configuration'
-            config['running'] = py23_compat.text_type(self.device.send_command(command))
+            config['running'] = str(self.device.send_command(command))
         if retrieve.lower() in ('startup', 'all'):
             # command = 'display saved-configuration last'
-            # config['startup'] = py23_compat.text_type(self.device.send_command(command))
+            # config['startup'] = str(self.device.send_command(command))
             pass
         return config
 
@@ -720,8 +719,8 @@ class CEDriver(NetworkDriver):
                 results[local_iface] = []
 
             neighbor_dict = dict()
-            neighbor_dict['port'] = py23_compat.text_type(neighbor[1])
-            neighbor_dict['hostname'] = py23_compat.text_type(neighbor[2])
+            neighbor_dict['port'] = str(neighbor[1])
+            neighbor_dict['hostname'] = str(neighbor[2])
             results[local_iface].append(neighbor_dict)
         return results
 
@@ -760,7 +759,7 @@ class CEDriver(NetworkDriver):
         for mac_info in match:
             mac_dict = {
                 'mac': napalm.base.helpers.mac(mac_info[0]),
-                'interface': py23_compat.text_type(mac_info[2]),
+                'interface': str(mac_info[2]),
                 'vlan': int(mac_info[1]),
                 'static': True if mac_info[3] == "static" else False,
                 'active': True if mac_info[3] == "dynamic" else False,
@@ -863,7 +862,7 @@ class CEDriver(NetworkDriver):
                 results_array = []
                 match = re.findall(r"Reply from.+time=(\d+)", output, re.M)
                 for i in match:
-                    results_array.append({'ip_address': py23_compat.text_type(destination),
+                    results_array.append({'ip_address': str(destination),
                                           'rtt': float(i)})
                 ping_dict['success'].update({'results': results_array})
         return ping_dict
@@ -874,10 +873,10 @@ class CEDriver(NetworkDriver):
         # output = self.device.send_command(command)
 
         snmp_information = {
-            'contact': py23_compat.text_type(''),
-            'location': py23_compat.text_type(''),
+            'contact': str(''),
+            'location': str(''),
             'community': {},
-            'chassis_id': py23_compat.text_type('')
+            'chassis_id': str('')
         }
         return snmp_information
 
@@ -1175,7 +1174,7 @@ class CEDriver(NetworkDriver):
     @staticmethod
     def _create_tmp_file(config):
         tmp_dir = tempfile.gettempdir()
-        rand_fname = py23_compat.text_type(uuid.uuid4())
+        rand_fname = str(uuid.uuid4())
         filename = os.path.join(tmp_dir, rand_fname)
         with open(filename, 'wt') as fobj:
             fobj.write(config)
