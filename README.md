@@ -1,14 +1,15 @@
-[![PyPI](https://img.shields.io/pypi/v/napalm-ce.svg)](https://pypi.org/project/napalm-ce/)
-
 # napalm-ce
 
 This is a [NAPALM](https://github.com/napalm-automation/napalm) community driver for the Huawei CloudEngine Switch.
 
+## Requirements
+
+Python 3.6+, napalm 3+
 
 ## Quick start
 
 ```shell
-pip install napalm-ce
+pip install -i https://test.pypi.org/simple/ napalm-ce
 ```
 
 ```python
@@ -30,8 +31,8 @@ Check the full [NAPALM Docs](https://napalm.readthedocs.io/en/latest/index.html)
 * commit_config()
 * compare_config()
 * discard_config()
-* get_arp_table()
-* get_config(retrieve=u'all')
+* get_arp_table(vrf='')
+* get_config(retrieve='all', full=False, sanitized=False)
 * get_environment()
 * get_facts()
 * get_interfaces()
@@ -46,10 +47,4 @@ Check the full [NAPALM Docs](https://napalm.readthedocs.io/en/latest/index.html)
 * open()
 * ping(destination, source=u'', ttl=255, timeout=2, size=100, count=5, vrf=u'')
 * rollback()
-
-
-## Setting up a Lab Environment
-
-You can download Huawei eNSP simulator for free from [Huawei website](http://support.huawei.com/enterprise/wn/network-management/ensp-pid-9017384/software) after make an account. You can learn how to install it by this [tutorial](https://www.youtube.com/watch?v=Yw8HPPwrzZU).
-
 

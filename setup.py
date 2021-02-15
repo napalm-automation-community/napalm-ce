@@ -1,31 +1,32 @@
 """setup.py file."""
-
-import uuid
-
 from setuptools import setup, find_packages
-try:  # for pip >= 10
-    from pip._internal.req import parse_requirements
-except ImportError:  # for pip <= 9.0.3
-    from pip.req import parse_requirements
 
 __author__ = 'Hao Tang <thddaniel92@gmail.com>'
 
-install_reqs = parse_requirements('requirements.txt', session=uuid.uuid1())
-reqs = [str(ir.req) for ir in install_reqs]
+with open("requirements.txt", "r") as fs:
+    reqs = [r for r in fs.read().splitlines() if (len(r) > 0 and not r.startswith("#"))]
+
+with open("README.md", "r") as fs:
+    long_description = fs.read()
 
 setup(
     name="napalm-ce",
-    version="0.1.1",
-    packages=find_packages(),
+    version="0.2.0",
+    packages=find_packages(exclude=("test*",)),
     author="Hao Tang",
     author_email="thddaniel92@gmail.com",
-    description="Network Automation and Programmability Abstraction Layer with Multivendor support",
+    description="NAPALM driver for Huawei CloudEngine switches",
+    license="Apache 2.0",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     classifiers=[
-        'Topic :: Utilities',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.6',
+        "Topic :: Utilities",
+        "License :: OSI Approved :: Apache Software License",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS',
     ],

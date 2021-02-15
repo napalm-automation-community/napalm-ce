@@ -1,6 +1,6 @@
 Vlanif3000 current state : DOWN (ifindex: 129)
 Line protocol current state : DOWN
-Description:
+Description: Connect to spine
 Route Port,The Maximum Transmit Unit is 1500
 Internet Address is 192.168.255.1/24
 IP Sending Frames' Format is PKTFMT_ETHNT_2, Hardware address is 0c45-ba7d-83e6

@@ -1,4 +1,4 @@
-# Copyright 2016 Dravetech AB. All rights reserved.
+# Copyright 2018 Hao Tang. All rights reserved.
 #
 # The contents of this file are licensed under the Apache License, Version 2.0
 # (the "License"); you may not use this file except in compliance with the

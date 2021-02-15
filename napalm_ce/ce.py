@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2016 Dravetech AB. All rights reserved.
+# Copyright 2018 Hao Tang. All rights reserved.
 #
 # The contents of this file are licensed under the Apache License, Version 2.0
 # (the "License"); you may not use this file except in compliance with the
@@ -56,7 +56,7 @@ class CEDriver(NetworkDriver):
     """Napalm driver for HUAWEI CloudEngine."""
 
     def __init__(self, hostname, username, password, timeout=60, optional_args=None):
-        """Constructor."""
+        """NAPALM Huawei CloudEngine Handler."""
         self.device = None
         self.hostname = hostname
         self.username = username
@@ -121,7 +121,7 @@ class CEDriver(NetworkDriver):
 
     def close(self):
         """Close the connection to the device."""
-        if self.changed and self.backup_file is not "":
+        if self.changed and self.backup_file != "":
             self._delete_file(self.backup_file)
         self.device.disconnect()
         self.device = None
@@ -278,19 +278,21 @@ class CEDriver(NetworkDriver):
         {
             "Vlanif3000": {
                 "is_enabled": false,
-                "description": "Route Port,The Maximum Transmit Unit is 1500",
+                "description": "",
                 "last_flapped": -1.0,
                 "is_up": false,
                 "mac_address": "0C:45:BA:7D:83:E6",
-                "speed": -1
+                "speed": 1000,
+                'mtu': 1500
             },
             "Vlanif100": {
                 "is_enabled": false,
-                "description": "Route Port,The Maximum Transmit Unit is 1500",
+                "description": "",
                 "last_flapped": -1.0,
                 "is_up": false,
                 "mac_address": "0C:45:BA:7D:83:E4",
-                "speed": -1
+                "speed": 1000,
+                'mtu': 1500
             }
         }
         """
@@ -304,7 +306,8 @@ class CEDriver(NetworkDriver):
         re_protocol = r"Line protocol current state\W+(?P<protocol>.+)$"
         re_mac = r"Hardware address is\W+(?P<mac_address>\S+)"
         re_speed = r"^Speed\W+(?P<speed>\d+|\w+)"
-        re_description = r"^Description\W+(?P<description>.*)$"
+        re_description = r"^Description:(?P<description>.*)$"
+        re_mtu = r"(Maximum Transmit Unit|Maximum Frame Length) is (?P<mtu>\d+)"
 
         new_interfaces = self._separate_section(separator, output)
         for interface in new_interfaces:
@@ -329,17 +332,23 @@ class CEDriver(NetworkDriver):
             else:
                 mac_address = ""
 
-            speed = -1
+            speed = mtu = 0
             match_speed = re.search(re_speed, interface, flags=re.M)
             if match_speed:
                 speed = match_speed.group('speed')
                 if speed.isdigit():
                     speed = int(speed)
 
+            match_mtu = re.search(re_mtu, interface, flags=re.M)
+            if match_mtu:
+                mtu = match_mtu.group('mtu')
+                if mtu.isdigit():
+                    mtu = int(mtu)
+
             description = ''
             match = re.search(re_description, interface, flags=re.M)
             if match:
-                description = match.group('description')
+                description = match.group('description').strip()
 
             interfaces.update({
                 intf_name: {
@@ -348,7 +357,9 @@ class CEDriver(NetworkDriver):
                     'is_up': is_up,
                     'last_flapped': -1.0,
                     'mac_address': mac_address,
-                    'speed': speed}
+                    'speed': speed,
+                    'mtu': mtu
+                }
             })
         return interfaces
 
@@ -620,7 +631,7 @@ class CEDriver(NetworkDriver):
             environment['memory']['used_ram'] = int(match.group("used_ram"))
         return environment
 
-    def get_arp_table(self):
+    def get_arp_table(self, vrf=""):
         """
         Get arp table information.
 
@@ -628,7 +639,7 @@ class CEDriver(NetworkDriver):
             * interface (string)
             * mac (string)
             * ip (string)
-            * age (float) (not support)
+            * age (float)
 
         Sample output:
             [
@@ -646,6 +657,10 @@ class CEDriver(NetworkDriver):
                 }
             ]
         """
+        if vrf:
+            msg = "VRF support has not been implemented."
+            raise NotImplementedError(msg)
+
         arp_table = []
         output = self.device.send_command('display arp')
         re_arp = r"(?P<ip_address>\d+\.\d+\.\d+\.\d+)\s+(?P<mac>\S+)\s+(?P<exp>\d+|)\s+" \
@@ -653,21 +668,21 @@ class CEDriver(NetworkDriver):
         match = re.findall(re_arp, output, flags=re.M)
 
         for arp in match:
-            # if arp[2].isdigit():
-            #     exp = float(arp[2]) * 60
-            # else:
-            #     exp = 0
+            if arp[2].isdigit():
+                exp = round(float(arp[2]) * 60, 1)
+            else:
+                exp = -1.0
 
             entry = {
                 'interface': arp[4],
                 'mac': napalm.base.helpers.mac(arp[1]),
                 'ip': arp[0],
-                'age': -1.0,
+                'age': exp
             }
             arp_table.append(entry)
         return arp_table
 
-    def get_config(self, retrieve='all'):
+    def get_config(self, retrieve="all", full=False, sanitized=False):
         """
         Get config from device.
 
