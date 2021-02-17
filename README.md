@@ -1,3 +1,6 @@
+[![PyPI](https://img.shields.io/pypi/v/napalm-ce.svg)](https://pypi.python.org/pypi/napalm-ce)
+[![PyPI versions](https://img.shields.io/pypi/pyversions/napalm-ce.svg)](https://pypi.python.org/pypi/napalm-ce)
+
 # napalm-ce
 
 This is a [NAPALM](https://github.com/napalm-automation/napalm) community driver for the Huawei CloudEngine Switch.
@@ -6,11 +9,20 @@ This is a [NAPALM](https://github.com/napalm-automation/napalm) community driver
 
 Python 3.6+, napalm 3+
 
-## Quick start
+## Install
 
 ```shell
-pip install -i https://test.pypi.org/simple/ napalm-ce
+pip install napalm-ce
 ```
+
+
+## Upgrading
+
+```
+pip install napalm-ce -U
+```
+
+## Quick start
 
 ```python
 from napalm import get_network_driver
@@ -24,7 +36,7 @@ device.close()
 
 Check the full [NAPALM Docs](https://napalm.readthedocs.io/en/latest/index.html) for more detailed instructions.
 
-### Implemented API
+## Implemented API
 
 * cli(commands)
 * close()
