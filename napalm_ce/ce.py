@@ -768,7 +768,7 @@ class CEDriver(NetworkDriver):
         mac_address_table = []
         command = 'display mac-address'
         output = self.device.send_command(command)
-        re_mac = r"(?P<mac>\S+)\s+(?P<vlan>\d+|-)\s+(?P<interface>\S+)\s+(?P<type>\w+)\s+(?P<age>\d+|-)"
+        re_mac = r"(?P<mac>\S+)\s+(?P<vlan>\d+|-)\S*\s+(?P<interface>\S+)\s+(?P<type>\w+)\s+(?P<age>\d+|-)"
         match = re.findall(re_mac, output, re.M)
 
         for mac_info in match:
