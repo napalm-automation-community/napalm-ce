@@ -176,13 +176,13 @@ class CEDriver(NetworkDriver):
         # serial_number/IOS version/uptime/model
         for line in show_ver.splitlines():
             if 'VRP (R) software' in line:
-                search_result = re.search(r"\((?P<serial_number>CE\S+)\s+(?P<os_version>V\S+)\)", line)
+                search_result = re.search(r"\((?P<serial_number>CE\S+|AR\S+|S\S+)\s+(?P<os_version>V\S+)\)", line)
                 if search_result is not None:
                     serial_number = search_result.group('serial_number')
                     os_version = search_result.group('os_version')
 
-            if 'HUAWEI' in line and 'uptime is' in line:
-                search_result = re.search(r"CE\S+", line)
+            if 'HUAWEI' in line in line and 'uptime is' in line or "Huawei" in line and 'uptime is' in line:
+                search_result = re.search(r"CE\S+|AR\S+|S\S+", line)
                 if search_result is not None:
                     model = search_result.group(0)
                 uptime = self._parse_uptime(line)
