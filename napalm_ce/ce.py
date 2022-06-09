@@ -818,6 +818,102 @@ class CEDriver(NetworkDriver):
         # output = self.device.send_command(command)
         return result
 
+    def get_ntp_peers(self):
+        """
+        Return the NTP peers configuration as list of dictionaries.
+        Sample output:
+        [
+           {
+                'clock source': '172.22.81.11',
+                'clock stratum': 2,
+                'clock status': 'configured, master, sane, valid',
+                'reference clock id': '172.27.116.16',
+                'reach': '255',
+                'current poll': '64',
+                'now': '33',
+                'offset': '-283.6776 ms',
+                'delay': '2.18 ms',
+                'disper': '1.41 ms'
+            }
+        ]
+        """
+        ntp_peer = []
+        command = "display ntp session"
+        output = self.device.send_command(command)
+        
+        re_ntp = r"clock source:\s+(?P<clock_source>\S+)$\n.*"\
+                 r"clock stratum:\s+(?P<clock_strat>\S+)$\n.*"\
+                 r"clock status:\s+(?P<sync_status>.+)$\n.*"\
+                 r"reference clock ID:\s(?P<ntp_ref_id>\S+)$\n.*"\
+                 r"reach:\s(?P<reach>\S+)$\n.*"\
+                 r"current poll:\s(?P<cur_poll>\S+)$\n.*"\
+                 r"now:\s(?P<now>\S+)$\n.*"\
+                 r"offset:\s(?P<offset>.+)$\n.*"\
+                 r"delay:\s(?P<delay>.+)$\n.*"\
+                 r"disper:\s(?P<disper>.+)$"
+
+        match = re.findall(re_ntp, output, re.MULTILINE)
+        for ntp_info in match:
+            ntp_dict = {
+                'clock source': ntp_info[0],
+                'clock stratum': int(ntp_info[1]),
+                'clock status': ntp_info[2],
+                'reference clock id': ntp_info[3],
+                'reach': ntp_info[4],
+                'current poll': ntp_info[5],
+                'now': ntp_info[6],
+                'offset': ntp_info[7],
+                'delay': ntp_info[8],
+                'disper': ntp_info[9]
+            }
+            ntp_peer.append(ntp_dict)
+        return ntp_peer
+
+    def get_ntp_stats(self):
+        """
+        Return the NTP Status as dictionary.
+        Sample output:
+        {
+            'clock_status': 'unsynchronized',
+            'clock_stratum': 16,
+            'ntp_reference_id': 'none',
+            'reference_time': '00:00:00.000 UTC Jan 1 1900(00000000.00000000)'
+            'source_if': ""
+            'source_if_vrf': "" ,
+            'acl_peer': "" 
+        }
+        """
+        ntp_stats = {}
+
+        command_status = "display ntp status"
+        output = self.device.send_command(command_status)
+
+        if not output:
+            return {}
+
+        re_ntp = r"clock status:\s+(?P<sync_status>\S+).*" \
+                 r"clock stratum:\s+(?P<clock_strat>\S+)"
+        re_ntp_reference = r"reference clock ID:\s(?P<ntp_ref_id>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
+        re_ntp_time = r"reference time:\s(?P<ref_time>.+\))"
+
+        match = re.search(re_ntp, output, re.DOTALL)
+        match_ntp_reference = re.search(re_ntp_reference, output, re.M)
+        match_ntp_time = re.search(re_ntp_time, output, re.M)
+
+        if match is None:
+            msg = "No Match Found"
+            raise ValueError(msg)
+        else:
+            ntp_dict = {
+                'clock_status': match.group('sync_status'),
+                'clock_stratum': int(match.group('clock_strat')),
+                'ntp_reference_id': None if match_ntp_reference is None else match_ntp_reference.group('ntp_ref_id'),
+                'reference_time': None if match_ntp_time is None else match_ntp_time.group('ref_time')
+                 }
+        ntp_stats.update(ntp_dict)
+
+        return ntp_stats
+
     def rollback(self):
         """Rollback to previous commit."""
         if self.changed:
