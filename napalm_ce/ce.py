@@ -672,10 +672,15 @@ class CEDriver(NetworkDriver):
                 exp = round(float(arp[2]) * 60, 1)
             else:
                 exp = -1.0
+                
+            if arp[1].startswith('Incomp')
+                mac_ = ''
+            else:
+                mac_ = napalm.base.helpers.mac(arp[1])
 
             entry = {
                 'interface': arp[4],
-                'mac': napalm.base.helpers.mac(arp[1]),
+                'mac': mac_,
                 'ip': arp[0],
                 'age': exp
             }
