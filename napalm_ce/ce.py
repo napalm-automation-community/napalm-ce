@@ -895,7 +895,7 @@ class CEDriver(NetworkDriver):
         }
         return snmp_information
 
-    def __get_lldp_neighbors_detail(self, interface=''):
+    def get_lldp_neighbors_detail(self, interface=''):
         """
         Return a detailed view of the LLDP neighbors as a dictionary.
 
@@ -916,6 +916,62 @@ class CEDriver(NetworkDriver):
         }
         """
         lldp_neighbors = {}
+        command = 'display lldp neighbor'
+        output = self.device.send_command(command)
+        formatted_output = output.split('\n')
+        interfaces_dict = {}
+        current_interface = None
+        for info in formatted_output:
+            header = re.match(r"^(.*) has (\d+) neighbor\(s\)", info)
+            if header:
+                current_interface = header.group(1)
+                interfaces_dict[current_interface] = []
+            else:
+                try:
+                    interfaces_dict[current_interface].append(info)
+                except KeyError:
+                    continue
+
+        for interface_key, interface_value in interfaces_dict.items():
+            lldp_neighbors[interface_key] = []
+            neighbor_index = None
+            for value in interface_value:
+                neighbor_index_match = re.match(r"Neighbor index\s+:(\d+)", value)
+                if neighbor_index_match:
+                    neighbor_index = int(neighbor_index_match.group(1))
+                    lldp_neighbors[interface_key].append({'parent_interface': interface_key})
+                elif value:
+                    try:
+                        chassis = re.match(r'Chassis ID\s+:(.*)', value)
+                        if chassis:
+                            lldp_neighbors[interface_key][neighbor_index - 1].update(
+                                {'remote_chassis_id': chassis.group(1)})
+                        remote_name = re.match(r"System name\s+:(.*)", value)
+                        if remote_name:
+                            lldp_neighbors[interface_key][neighbor_index - 1].update(
+                                {'remote_system_name': remote_name.group(1)})
+                        remote_port = re.match(r"Port ID\s+:(.*)", value)
+                        if remote_port:
+                            lldp_neighbors[interface_key][neighbor_index - 1].update(
+                                {'remote_port': remote_port.group(1)})
+                        port_description = re.match(r"Port description\s+:(.*)", value)
+                        if port_description:
+                            lldp_neighbors[interface_key][neighbor_index - 1].update(
+                                {'remote_port_description': port_description.group(1)})
+                        remote_system_description = re.match(r"System description\s+:(.*)", value)
+                        if remote_system_description:
+                            lldp_neighbors[interface_key][neighbor_index - 1].update(
+                                {'remote_system_description': remote_system_description.group(1)})
+                        remote_system_capab = re.match(r"System capabilities supported\s+:(.*)", value)
+                        if remote_system_capab:
+                            lldp_neighbors[interface_key][neighbor_index - 1].update(
+                                {'remote_system_capab': remote_system_capab.group(1)})
+                        remote_system_enable_capab = re.match(r"System capabilities enabled\s+:(.*)", value)
+                        if remote_system_enable_capab:
+                            lldp_neighbors[interface_key][neighbor_index - 1].update(
+                                {'remote_system_enable_capab': remote_system_enable_capab.group(1)})
+                    except TypeError:
+                        continue
         return lldp_neighbors
 
     def __get_ntp_peers(self):
