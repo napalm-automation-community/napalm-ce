@@ -31,7 +31,10 @@ import hashlib
 
 # import third party lib
 from netmiko import ConnectHandler
-from netmiko.ssh_exception import NetMikoTimeoutException
+try:
+    from netmiko.ssh_exception import NetMikoTimeoutException
+except ModuleNotFoundError:
+    from netmiko import NetMikoTimeoutException
 
 # import NAPALM Base
 import napalm.base.helpers
