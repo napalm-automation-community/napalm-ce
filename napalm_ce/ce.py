@@ -676,7 +676,7 @@ class CEDriver(NetworkDriver):
             else:
                 exp = -1.0
                 
-            if arp[1].startswith('Incomp')
+            if arp[1].startswith('Incomp'):
                 mac_ = ''
             else:
                 mac_ = napalm.base.helpers.mac(arp[1])
