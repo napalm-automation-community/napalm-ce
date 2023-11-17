@@ -32,7 +32,7 @@ import hashlib
 # import third party lib
 from netmiko import ConnectHandler
 try:
-    from netmiko.ssh_exception import NetMikoTimeoutException
+    from netmiko.exceptions import NetMikoTimeoutException
 except ModuleNotFoundError:
     from netmiko import NetMikoTimeoutException
 
